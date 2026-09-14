@@ -162,7 +162,7 @@ ls pom.xml build.gradle.kts              # Java/Kotlin
 
 ## §0.4 交付物：`BEHAVIOR-CONTRACT.md`
 
-必须落盘成仓库里的版本化文件。模板见 [templates/BEHAVIOR-CONTRACT-template.md](templates/BEHAVIOR-CONTRACT-template.md)。
+必须落盘成仓库里的版本化文件。模板见 [templates/BEHAVIOR-CONTRACT-template.md](../templates/BEHAVIOR-CONTRACT-template.md)。
 
 最低要求：
 
@@ -201,6 +201,25 @@ ls pom.xml build.gradle.kts              # Java/Kotlin
    每个批次收尾检查一次：新增/修改的代码是否仍在基线覆盖范围内。
 5. **基线耗时超过 5 分钟时**，建立分层运行方案：批次内只跑相关子集，批次收尾跑全量，
    并明确记录跳过了什么。
+
+### §0.5.1 删除类改动为什么需要额外验证
+
+**删除不是行为保持，而是行为缩减。** 命名归一与结构改动要求「基线结果完全一致」，
+而删除会让某些路径彻底消失——基线的通过并不能证明删对了，只能证明
+**被基线覆盖的路径没被误删**。
+
+因此删除批次在此之上还有三项额外要求：
+
+1. **必须有独立的取证记录**，而不是「基线绿所以能删」。
+   取证协议见 [dead-code-removal.md](dead-code-removal.md)。
+2. **必须有覆盖边界说明**：基线覆盖不到的路径，删除结论的证据强度要如实标注。
+3. **必须登记观察项**：删除后基线绿只是通过第一道关。
+   路线 A 需覆盖一个完整业务周期；路线 B 需由用户实际走查主要流程，
+   并把观察项写进 `REARCH-STATE.md` 留待下一轮验证。
+
+> [!WARNING]
+> 「基线绿了所以删对了」是删除类改动最常见的误判。
+> 基线只覆盖它覆盖的东西；没被覆盖的低频路径被删掉了，基线依然全绿。
 
 ---
 

@@ -54,6 +54,7 @@ auto_model_invocable: true
 | 把术语表落到代码上、安全地批量重命名 | [naming-normalization.md](references/naming-normalization.md) |
 | 破坏性变更的迁移方案（版本、脚本、弃用、回滚） | [migration.md](references/migration.md) |
 | 跨会话保持进展（>100 文件必读） | [session-state.md](references/session-state.md) |
+| 判定与删除死代码（两条取证路线） | [dead-code-removal.md](references/dead-code-removal.md) |
 | 语义类坏味道清单 | [smells.md 家族 7](references/smells.md)（姊妹技能 `refactor`） |
 | 语义红线与契约迁移安全规则 | [safety.md §9](references/safety.md) |
 | 具体重构手法 | [references/catalog-*.md](references/catalog-composing.md) |
@@ -100,6 +101,16 @@ auto_model_invocable: true
 **发现的是单点坏味道**（一个长函数、一处重复）
 → 别用本技能。直接用 `refactor` 技能。
 
+**怀疑某段代码是死代码，想删掉**
+→ 读 [dead-code-removal.md](references/dead-code-removal.md)。**先确认取证路线**：
+有线上日志/APM → 运行时取证；无 → 纯本地入口可达性。
+**纯本地模式下删除范围必须收窄**（只删 T1 高置信、T5、T6），
+且 `grep` 零命中**不构成**删除依据。
+
+**要删 feature flag 后面的代码**
+→ **不要直接删。** 先关开关、观察一个完整周期，再决定是否删代码。
+见 [dead-code-removal.md](references/dead-code-removal.md) §D.4 T2。
+
 **用户没说要改契约，但你发现必须改**
 → 停下来问。读 [migration.md](references/migration.md) §1 判定破坏性，
 给出迁移方案后再动手。
@@ -135,6 +146,10 @@ AI 生成的项目整理、这个项目太乱了想重做底层
    详见 [migration.md](references/migration.md) §3。
 5. **任何结论都要落盘。** 术语表、语义地图、重命名映射、状态文件都是仓库里的
    版本化文件，不是聊天记录。跨会话必须靠它们恢复。
+6. **删代码是存在性变更，不是优化。** 死代码必须走证据化判定
+   （[dead-code-removal.md](references/dead-code-removal.md)）：
+   `grep` 零命中不算证据；纯本地模式只允许删高置信度的不可达代码；
+   删除必须单独成批、独立提交、登记观察项。
 
 ---
 

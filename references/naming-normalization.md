@@ -114,7 +114,7 @@ grep -rlw "OldName"        # 统计命中文件数
 
 ## §2B.2 `RENAME-MAP.md` 结构
 
-模板见 [templates/RENAME-MAP-template.md](templates/RENAME-MAP-template.md)。最小字段：
+模板见 [templates/RENAME-MAP-template.md](../templates/RENAME-MAP-template.md)。最小字段：
 
 | 字段 | 说明 |
 |---|---|

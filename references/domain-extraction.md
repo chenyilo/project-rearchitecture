@@ -118,7 +118,7 @@ grep: FROM <table>|INTO <table>|UPDATE <table>|\.<table>\.|model\(.*<Table>|@Ent
 ## §2A.6 目标模型文档
 
 产出 `TARGET-MODEL.md`，模板见
-[templates/TARGET-MODEL-template.md](templates/TARGET-MODEL-template.md)。必须包含：
+[templates/TARGET-MODEL-template.md](../templates/TARGET-MODEL-template.md)。必须包含：
 
 1. **限界上下文清单** —— 每个上下文的名称、职责一句话、包含的概念、负责的契约点。
 2. **上下文之间的依赖方向** —— 必须是**有向无环图**。若出现环，说明边界切错了。

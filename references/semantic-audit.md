@@ -165,13 +165,23 @@ LLM 辅助审计可以大幅提速，但**必须约束输出格式**并要求证
 早期方案残留、被替换但没删的旧路径、为假想需求做的抽象、废弃的 feature flag 分支。
 
 - **危害**：占用认知与维护成本，混淆真值来源，让审计得出错误结论。
-- **证据**：无调用点（含动态调用、反射、路由注册、事件订阅、外部触发），
-  且数据表里无数据或仅有历史数据。
-- **处置**：确认无引用后删除。**删除是最难回滚的操作之一**，必须：
-  ① 全量搜索引用（含字符串形式的动态引用、配置、文档、CI 脚本）；
-  ② 确认表/字段是否仍有历史数据与合规保留要求；
-  ③ 单独一个批次，不与任何其他改动混合。
-- **优先级**：Major，但风险等级高。宁可先标记后处理。
+- **证据**：**必须按 [dead-code-removal.md](dead-code-removal.md) 的取证协议判定，
+  不得以 `grep` 零命中作为依据。** 幽灵概念只是死代码的一个子集，
+  完整分类是 T1–T6（不可达 / 受限不活 / 数据死 / 重复实现 / 注释块 / 半成品抽象）。
+- **处置**：走 [dead-code-removal.md](dead-code-removal.md) 的删除协议，产出
+  `DEAD-CODE-CANDIDATES.md`。核心约束：
+  ① **先确认取证路线**（有线上日志走运行时取证，无日志走纯本地入口可达性）；
+  ② 有 UI 时以 **UI 链路是否触达**为准，且必须走到**后端路由注册处**，
+     不能只看前端路由表；
+  ③ 无 UI 时检查**网关配置、路由注册、调度与订阅注册、CLI 入口、对外导出**，
+     以及本地历史日志；
+  ④ 路线 B（纯本地）下**必须收窄删除范围**：只删 T1（高置信）、T5、T6；
+     T2 只关开关不删代码，T3 只删代码保留数据，T4 先做语义审计；
+  ⑤ 单独一个批次，不与任何其他改动混合，且登记观察项。
+- **优先级**：Major，但风险等级高。**宁可先标记后处理。**
+- **输出物**：候选进 `DEAD-CODE-CANDIDATES.md`（模板见
+  [templates/DEAD-CODE-CANDIDATES-template.md](../templates/DEAD-CODE-CANDIDATES-template.md)），
+  而非直接进 `DRIFT-REPORT.md` 的处置队列。
 
 ### D5 缺失概念（Missing Concept）
 
@@ -249,9 +259,11 @@ LLM 辅助审计可以大幅提速，但**必须约束输出格式**并要求证
 
 模板见 `templates/` 目录：
 
-- [GLOSSARY-template.md](templates/GLOSSARY-template.md) —— 术语表
-- [SEMANTIC-MAP-template.md](templates/SEMANTIC-MAP-template.md) —— 概念到代码的映射
-- [DRIFT-REPORT-template.md](templates/DRIFT-REPORT-template.md) —— 漂移清单与优先级
+- [GLOSSARY-template.md](../templates/GLOSSARY-template.md) —— 术语表
+- [SEMANTIC-MAP-template.md](../templates/SEMANTIC-MAP-template.md) —— 概念到代码的映射
+- [DRIFT-REPORT-template.md](../templates/DRIFT-REPORT-template.md) —— 漂移清单与优先级
+- [DEAD-CODE-CANDIDATES-template.md](../templates/DEAD-CODE-CANDIDATES-template.md) ——
+  死代码候选与取证记录（凡涉及 D4 幽灵概念，必须产出本文件）
 
 ### 完成标准
 
@@ -261,7 +273,9 @@ LLM 辅助审计可以大幅提速，但**必须约束输出格式**并要求证
 2. 每个核心概念都能写出「一句话定义 + 不变量 + 权威定义位置」。
 3. 每条漂移都有分类（D1–D5）、证据、评分、契约处置。
 4. `UNRESOLVED` 项已逐条处置，无静默丢弃。
-5. 三个交付文件已提交进 git。
+5. 涉及死代码的结论已按 [dead-code-removal.md](dead-code-removal.md) 取证，
+   并标注了路线与证据等级。
+6. 交付文件已提交进 git。
 
 ### 禁止事项
 
