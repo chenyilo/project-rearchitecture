@@ -9,9 +9,8 @@ baseline_status: <green | known-failing | red | unknown>
 
 # 重架构全局状态：<项目名>
 
-> 本文件由 `project-rearchitecture` 技能维护，是**跨会话恢复的唯一入口**。
-> 每次会话开始先读本文件，结束时必须更新本文件。
-> 保持简短：细节请下沉到 `AUDIT-PROGRESS.md` / `DRIFT-REPORT.md`，本文件目标 1–2 屏。
+> **跨会话恢复的唯一入口。** 每次会话开始先读本文件，结束时必须更新本文件。
+> 保持简短：细节下沉到 `AUDIT-PROGRESS.md` / `DRIFT-REPORT.md`，本文件目标 1–2 屏。
 
 ---
 
@@ -100,7 +99,7 @@ baseline_status: <green | known-failing | red | unknown>
 
 ## 5. 已完成批次记录
 
-> 已完成／已回滚的批次都要记。**回滚记录比成功记录更值钱**，不要删。
+> 已完成／已回滚的批次都要记，回滚记录不要删。
 
 | 批次 | 目标 | 结果 | 起始 commit | 收尾 commit | 基线 | 备注 |
 |---|---|---|---|---|---|---|
@@ -140,7 +139,7 @@ baseline_status: <green | known-failing | red | unknown>
 
 ## 7. 已知风险与坑
 
-> 每条都要写「为什么」和「该怎么做」。**只写结论的风险条目等于没写。**
+> 每条风险都要写清「为什么」和「该怎么做」。
 
 | # | 风险 / 坑 | 影响 | 应对 |
 |---|---|---|---|
