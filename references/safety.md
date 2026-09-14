@@ -302,7 +302,7 @@ Step C — Remove:     删除旧位置。测试必须通过。
 
 ### §9.1 语义级前置条件（在改任何一个名字之前，全部必须为真）
 
-- [ ] **行为基线存在且当前全绿。** 至少有一份可重放的 `BEHAVIOR-CONTRACT.md`（见 `../../project-rearchitecture/references/behavior-freeze.md` 与 `templates/BEHAVIOR-CONTRACT-template.md`）。`KNOWN-FAILING` 段允许存在，但必须已逐条记录。
+- [ ] **行为基线存在且当前全绿。** 至少有一份可重放的 `BEHAVIOR-CONTRACT.md`（见姊妹技能 `project-rearchitecture` 的 `references/behavior-freeze.md` 与 `templates/BEHAVIOR-CONTRACT-template.md`）。`KNOWN-FAILING` 段允许存在，但必须已逐条记录。
 - [ ] **术语表存在。** `GLOSSARY.md` 中每个待改动的概念都有一句话定义 + 关键不变量 + 权威定义位置（`文件:行`）。
 - [ ] **语义地图存在。** `SEMANTIC-MAP.md` 能回答"这个概念落在哪些代码上"，而不是靠临时搜索拼凑。
 - [ ] **重命名映射已产出并获确认。** `RENAME-MAP.md` 写明旧名 → 新名、理由、影响面、契约处置，并经用户确认。
